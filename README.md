@@ -1,6 +1,6 @@
-**Markout**
+# Markout
 
-Is a simple text markup language that is designed to meet the following goals
+Is a simple text markup language that is designed to meet the following goals:
 
 * Simple, consistent tag syntax.
 * Support tag synonyms.
