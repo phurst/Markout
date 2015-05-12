@@ -1,0 +1,2 @@
+﻿plain {b}bold {u}bold underline {b}underline {i}underline italic {0}plain
+{u}underline {u}{b}bold {0}plain

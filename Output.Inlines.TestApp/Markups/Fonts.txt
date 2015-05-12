@@ -1,0 +1,3 @@
+﻿normal {font:Rockwell Extra Bold:24}This is Rockwell Extra Bold 24em in {color:red}Red{color} and {color:green}Green{color} 
+or not{font} normal.
+normal {font:Rockwell Extra Bold:16:su}This is Rockwell Extra Bold 16em with strikeout and underline{font} normal.

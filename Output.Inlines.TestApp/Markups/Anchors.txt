@@ -1,0 +1,3 @@
+﻿plain {a:http://google.com:LaunchUrl}Go To Google{a} plain
+plane {a:SayHello:AnchorAction}Say "Hello" to me!{a} plane
+

@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="Markout.Output.Inlines.TestApp.View.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls1="clr-namespace:Markout.Output.Inlines.Controls;assembly=Markout.Output.Inlines.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+            <ComboBox Margin="5" ItemsSource="{Binding Markups}" SelectedItem="{Binding SelectedMarkup, Mode=TwoWay}"
+                  DisplayMemberPath="Item1" 
+                  IsSynchronizedWithCurrentItem="True"
+                  Text ="Select a markup..."
+                  />
+            <Button Margin="5,0,5,5" HorizontalAlignment="Left"
+                    Command="{Binding UseSelectedMarkup}"
+                    >Use Selected Markup</Button>
+        </StackPanel>
+       
+        <Label Grid.Row="1" Grid.Column="0" Margin="5">Markup Text</Label>
+        <TextBox x:Name="MarkupTextBox" Grid.Row="1" Grid.Column="1" Margin="5" 
+                 Text="{Binding MarkupText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 MaxLines="1000" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"
+                 />
+
+        <Label Grid.Row="2" Grid.Column="0">Result</Label>
+        <controls1:InlinesTextBlock Grid.Row="2" Grid.Column="1" TextInlines="{Binding MarkupInlines}" />
+    </Grid>
+</UserControl>

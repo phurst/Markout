@@ -1,0 +1,3 @@
+﻿plain {color:Red}Red {b}Red Bold {color}Bold {b}plain
+plain {color:FF008000}Dark Green {b}Dark Green Bold {color}{b}plain
+plain
