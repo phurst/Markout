@@ -12,8 +12,11 @@ Is a simple text markup language that is designed to meet the following goals:
 # Tag Syntax
 
 All Markout tags are of the form {tag}. This makes it very easy to identify tags in the input text, which makes the parser very simple. An example is the bold tag: {b}. 
+
 Some tags require information in addition to a basic tag name. These are of the form {tagname:qualifier1:qualifier2:…}. An example is the color tag: {color:red}.
+
 Repeating a tag turns it off. For example plain{b}bold{b}plain. Or: BLACK{color:red}RED{color}BLACK.
+
 In this first version I provide a very limited set of tags, but expect to add more and the need becomes apparent.
 
 # Tag Synonyms
@@ -31,7 +34,8 @@ Markout converts the input text into a set of attributed TextRun instances. This
 # Support for Macros
 
 Markout supports the notion of macros. A macro is a named tag that is expanded into other tags when rendered. For example you might define a tag {code} to be represented as {font:Courier:10}{color:DarkGrey}. 
-Macros are currently supplied as a dictionary to the MarkoutParser.
+
+Macros are  supplied as a dictionary to the MarkoutParser, which expands them into the input text.
 
 # Code Structure
 
@@ -43,13 +47,18 @@ The TagParser class identifies Markout tags in the input text and creates a set 
 
 ## MarkoutParser
 
-The MarkoutParser class uses the TagParser to locate the tags in the input text and then chops the text up into a set of TextRun instances, combining attributes as necessary. So, for instance, the input text plain{b}{i}bolditalic would be output as two TextRun instances: the first would have text “plain” and no attributes; the second would have text “bolditalic” and bold an italic attributes.
-The TextRun instances emitted by the MarkoutParser class can be sent to another class that can render them into the desired output form. 
+The MarkoutParser class uses the TagParser to locate the tags in the input text and then chops the text up into a set of TextRun instances, combining attributes as necessary. 
+
+For instance, the input text plain{b}{i}bolditalic would be output as two TextRun instances: the first would have text “plain” and no attributes; the second would have text “bolditalic” and bold an italic attributes.
+
+The TextRun instances emitted by the MarkoutParser class are sent to another class to render them into the desired output form. 
+
 You can supply a dictionary of macros to the MarkoutParser if desired.
 
 ## MarkoutRenderer
 
 The MarkoutRenderer class (in the Markout.Output.Inlines namespace) takes a set of TextRun instances produced by the MarkoutParser and renders them into a set of Inlines which may then be assigned to the Inlines property of a WPF TextBlock.
+
 The anchor tag is rendered as a hypertext element in the Inlines. You can provide a set of named actions to be associated, with anchor tags, and called when the anchor tag is clicked.
 
 ## Controls
@@ -59,6 +68,7 @@ The Inlines.TextBlock control is a subclass of the WPF TextBlock that exposes a 
 ## Tests
 
 Unit tests are supplied for most input components. 
+
 A WPF application (Output.Inlines.TestApp) is provided to visualize the effect of various markups when sent to a WPF TextBlock. 
 
 ## Sample Code
@@ -76,17 +86,10 @@ Tag | Qualifiers | Descriptions | Example |
 b || Bold | {b} |
 i || Italic | {i} |
 u || Underline | {u} |
-f, font | Font Name
-Font Size
-Decorations (b, I, u) | Font | {f:Courier:12:bu}
-{f:Courier:12}
-{font:Courier} |
+f, font | Font Name<br> Font Size<br> Decorations (b, I, u) | Font | {f:Courier:12:bu}<br> {f:Courier:12}<br> {font:Courier} |
 c, color, colour | Color Name | Color | {c:DarkGreen} |
-a, anchor | Uri
-Action Name | Hyperlink | {a:http://google.com:LaunchUrl}Google{a}
-Renders as: Google |
-{{ || Escape |A tag looks like {{b}
-Renders as: A tag looks like {b} |
+a, anchor | Uri<br> Action Name | Hyperlink | {a:http://google.com:LaunchUrl}Google{a}<br> Renders as: Google |
+{{ || Escape |A tag looks like {{b}<br> Renders as: A tag looks like {b} |
 
 
 # Notes
