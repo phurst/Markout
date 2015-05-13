@@ -15,11 +15,11 @@ namespace Markout.Output.Inlines {
         private Queue<TextRun> _textRuns;
         private readonly List<Inline> _inlines = new List<Inline>();
         private Inline _currInline = null;
-        private Dictionary<string, Action<TextAttributeAnchor>> _anchorActions = null;
+        private Dictionary<string, Action<TextAttributeAnchor, string>> _anchorActions = null;
 
         public IEnumerable<Inline> Render(
             IEnumerable<TextRun> textRuns,
-            Dictionary<string, Action<TextAttributeAnchor>> anchorActions = null
+            Dictionary<string, Action<TextAttributeAnchor, string>> anchorActions = null
             ) {
                 _textRuns = new Queue<TextRun>(textRuns);
             _inlines.Clear();
@@ -47,9 +47,9 @@ namespace Markout.Output.Inlines {
                             hyperlink.Foreground = new SolidColorBrush(Colors.Blue);
                             hyperlink.TextDecorations = TextDecorations.Underline;
                             if (!string.IsNullOrWhiteSpace(taa.ActionName) && _anchorActions != null) {
-                                Action<TextAttributeAnchor> action;
+                                Action<TextAttributeAnchor, string> action;
                                 if (_anchorActions.TryGetValue(taa.ActionName.Trim(), out action)) {
-                                    hyperlink.Click += (sender, args) => action(taa);
+                                    hyperlink.Click += (sender, args) => action(taa, textRun.Text);
                                 }
                             }
                             _currInline = hyperlink;
