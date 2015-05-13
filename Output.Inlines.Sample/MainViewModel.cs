@@ -54,14 +54,14 @@ namespace Markout.Output.Inlines.Sample {
 
         private void UpdateInlines() {
             IEnumerable<TextRun> textRuns = _markoutParser.Parse(InputText);
-            IEnumerable<Inline> inlines = _renderer.Render(textRuns, new Dictionary<string, Action<TextAttributeAnchor>> {
+            IEnumerable<Inline> inlines = _renderer.Render(textRuns, new Dictionary<string, Action<TextAttributeAnchor, string>> {
                 {
                     "LaunchUrl",
-                    anchor => Process.Start(anchor.Uri.ToString())
+                    (anchor, content) => Process.Start(anchor.Uri.ToString())
                 },
                 {
                     "AnchorAction",
-                    anchor => MessageBox.Show("Hello there!")
+                    (anchor, content) => MessageBox.Show("Hello there! Content=" + (content ?? "NULL"))
                 },
             });
             MarkupInlines.Clear();
