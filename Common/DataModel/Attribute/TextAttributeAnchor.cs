@@ -11,6 +11,7 @@ namespace Markout.Common.DataModel.Attribute {
         }
 
         public Uri Uri { get; set; }
+        public string AnchorInfo { get; set; }
         public string ActionName { get; set; }
 
         public override string ToString() {

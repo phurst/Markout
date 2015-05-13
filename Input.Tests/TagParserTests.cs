@@ -201,5 +201,27 @@ namespace Markout.Input.Tests {
 
             Assert.IsNotNull(tagA.Attribute);
         }
+
+        [TestMethod]
+        public void TagParserParseWithNonUrlAnchorInfo() {
+            string input = "123{a:=BB(\"AA\",\"01/01/2015\"):ActionName}Hello{a}";
+            string posit = "0123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789";
+            TagParser tagParser = new TagParser();
+            List<Tag> tags = tagParser.Parse(input).ToList();
+            Assert.IsTrue(tags.Any());
+            tags.ForEach(t => Console.WriteLine("\t" + t.GetDescription()));
+
+            Tag tagA = tags.FirstOrDefault(t => t.TextAttributeType == TextAttributeTypeEnum.Anchor);
+            Assert.IsNotNull(tagA);
+            Assert.AreEqual(3, tagA.StartIndex);
+            Assert.AreEqual(40, tagA.TrailIndex);
+
+            Assert.IsNotNull(tagA.Attribute);
+            TextAttributeAnchor taa = tagA.Attribute as TextAttributeAnchor;
+            Assert.IsNotNull(taa);
+            Assert.IsNull(taa.Uri);
+            Assert.IsNotNull(taa.AnchorInfo);
+            Assert.AreEqual("=BB(\"AA\",\"01/01/2015\")", taa.AnchorInfo);
+        }
     }
 }

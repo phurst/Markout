@@ -48,6 +48,7 @@ namespace Markout.Input.Tags.TagFactories {
                 throw new ApplicationException(string.Format("The AnchorTagFactory qualifer is empty"));
             }
             Uri uri = null;
+            string anchorInfo = null;
             string actionName = null;
             string[] parts = qualifier.Split(':');
             if (parts.Length > 1 && parts[0].Length > 0 && parts[1].StartsWith("//")) {
@@ -55,13 +56,19 @@ namespace Markout.Input.Tags.TagFactories {
                 parts = (new string[] { parts[0] + ":" + parts[1] }).Concat(parts.Skip(2)).ToArray();
             }
             if (parts.Length > 0) {
-                UriBuilder uriBuilder = new UriBuilder(parts[0]);
-                uri = uriBuilder.Uri;
+                try {
+                    UriBuilder uriBuilder = new UriBuilder(parts[0]);
+                    uri = uriBuilder.Uri;
+                } catch (UriFormatException) {
+                    if (!string.IsNullOrWhiteSpace(parts[0])) {
+                        anchorInfo = parts[0].Trim();
+                    }
+                }
             }
             if (parts.Length > 1) {
                 actionName = parts[1].Trim();
             }
-            return new TextAttributeAnchor { Uri = uri, ActionName = actionName, };
+            return new TextAttributeAnchor { Uri = uri, AnchorInfo = anchorInfo, ActionName = actionName, };
         }
     }
 }
