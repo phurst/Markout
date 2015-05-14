@@ -16,6 +16,7 @@ namespace Markout.Input.Parser {
             new UnqualifiedTagFactory()  { TagRecognizer = "b" },
             new UnqualifiedTagFactory()  { TagRecognizer = "i" },
             new UnqualifiedTagFactory()  { TagRecognizer = "u" },
+            new UnqualifiedTagFactory()  { TagRecognizer = "0" },
             new FontTagFactory()  { TagRecognizer = "f" },
             new FontTagFactory()  { TagRecognizer = "font" },
             new ColorTagFactory()  { TagRecognizer = "c" },

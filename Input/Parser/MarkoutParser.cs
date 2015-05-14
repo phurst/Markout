@@ -44,8 +44,10 @@ namespace Markout.Input.Parser {
                         currentRun.Text = StripEscapes(text.Substring(prevTag.TrailIndex, tag.StartIndex - prevTag.TrailIndex));
                         TextRun prevRun = currentRun;
                         currentRun = new TextRun {Text = String.Empty,};
-                        currentRun.GetAttributesFrom(prevRun);
-                        currentRun.GetAttribute(tag.Attribute);
+                        if (tag.Attribute.TextAttributeType != TextAttributeTypeEnum.Zero) {
+                            currentRun.GetAttributesFrom(prevRun);
+                            currentRun.GetAttribute(tag.Attribute);
+                        }
                         textRuns.Add(currentRun);
                     } else {
                         currentRun.GetAttribute(tag.Attribute);

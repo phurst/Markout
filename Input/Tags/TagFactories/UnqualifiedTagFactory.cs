@@ -23,6 +23,9 @@ namespace Markout.Input.Tags.TagFactories {
                 case "u":
                     textAttributeType = TextAttributeTypeEnum.Underline;
                     break;
+                case "0":
+                    textAttributeType = TextAttributeTypeEnum.Zero;
+                    break;
                 default:
                     throw new ApplicationException(string.Format("The SimpleTagFactory was asked to create a Tag from a match of '{0}'", TagRecognizer));
             }

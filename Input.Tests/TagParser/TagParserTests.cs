@@ -16,7 +16,7 @@ namespace Markout.Input.Tests.TagParser {
 
         [TestMethod]
         public void TagParserParseSimpleTags() {
-            string input = "1{b}2{i}3{u}4";
+            string input = "1{b}2{i}3{u}4{0}5";
             string posit = "0123456789|123456789";
             Parser.TagParser tagParser = new Parser.TagParser();
             List<Tag> tags = tagParser.Parse(input).ToList();
@@ -43,6 +43,13 @@ namespace Markout.Input.Tests.TagParser {
             Assert.AreEqual(12, tagU.TrailIndex);
             Assert.IsNotNull(tagU.Attribute);
             Assert.AreEqual(TextAttributeTypeEnum.Underline, tagU.Attribute.TextAttributeType);
+
+            Tag tagZ = tags.FirstOrDefault(t => t.TextAttributeType == TextAttributeTypeEnum.Zero);
+            Assert.IsNotNull(tagZ);
+            Assert.AreEqual(13, tagZ.StartIndex);
+            Assert.AreEqual(16, tagZ.TrailIndex);
+            Assert.IsNotNull(tagZ.Attribute);
+            Assert.AreEqual(TextAttributeTypeEnum.Zero, tagZ.Attribute.TextAttributeType);
         }
 
         [TestMethod]

@@ -13,11 +13,11 @@ namespace Markout.Input.Tests.MarkoutParser {
 
         [TestMethod]
         public void MarkoutParserParseSimpleTags() {
-            string input = "0{b}1{i}2{u}3";
-            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
-            List<TextRun> textRuns = markdownParser.Parse(input).ToList();
+            string input = "0{b}1{i}2{u}3{0}4";
+            Parser.MarkoutParser markoutParser = new Parser.MarkoutParser();
+            List<TextRun> textRuns = markoutParser.Parse(input).ToList();
             textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
-            Assert.AreEqual(4, textRuns.Count);
+            Assert.AreEqual(5, textRuns.Count);
 
             TextRun tr0 = textRuns[0] as TextRun;
             Assert.IsNotNull(tr0);
@@ -44,13 +44,18 @@ namespace Markout.Input.Tests.MarkoutParser {
             Assert.IsTrue(tr3.Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Bold));
             Assert.IsTrue(tr3.Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Italic));
             Assert.IsTrue(tr3.Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Underline));
+
+            TextRun tr4 = textRuns[4] as TextRun;
+            Assert.IsNotNull(tr4);
+            Assert.AreEqual("4", tr4.Text);
+            Assert.AreEqual(0, tr4.Attributes.Count());
         }
 
         [TestMethod]
         public void MarkoutParserOnAndOffSimpleTags() {
             string input = "0{b}1{b}2";
-            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
-            List<TextRun> textRuns = markdownParser.Parse(input).ToList();
+            Parser.MarkoutParser markoutParser = new Parser.MarkoutParser();
+            List<TextRun> textRuns = markoutParser.Parse(input).ToList();
             textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
             Assert.AreEqual(3, textRuns.Count);
 
@@ -74,8 +79,8 @@ namespace Markout.Input.Tests.MarkoutParser {
         [TestMethod]
         public void MarkoutParserOnAndOffAdjacentSimpleTags() {
             string input = "0{b}{u}1{b}2{u}{i}3";
-            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
-            List<TextRun> textRuns = markdownParser.Parse(input).ToList();
+            Parser.MarkoutParser markoutParser = new Parser.MarkoutParser();
+            List<TextRun> textRuns = markoutParser.Parse(input).ToList();
             textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
             Assert.AreEqual(4, textRuns.Count);
 
@@ -107,8 +112,8 @@ namespace Markout.Input.Tests.MarkoutParser {
         [TestMethod]
         public void MarkoutParserOverlapSimpleTags() {
             string input = "0{b}1{i}2{b}3{u}4{i}5";
-            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
-            List<TextRun> textRuns = markdownParser.Parse(input).ToList();
+            Parser.MarkoutParser markoutParser = new Parser.MarkoutParser();
+            List<TextRun> textRuns = markoutParser.Parse(input).ToList();
             textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
             Assert.AreEqual(6, textRuns.Count);
 
@@ -153,13 +158,13 @@ namespace Markout.Input.Tests.MarkoutParser {
         [TestMethod]
         public void MarkoutParserParseSimpleTagsWithMacros() {
             string input = "0{bolditalic}1{bolditalic}2{bigredon}3{bigredoff}4";
-            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
-            markdownParser.Macros = new Dictionary<string, string> {
+            Parser.MarkoutParser markoutParser = new Parser.MarkoutParser();
+            markoutParser.Macros = new Dictionary<string, string> {
                 {"bolditalic", "{b}{i}"},
                 {"bigredon", "{font:Times New Roman:24}{color:red}"},
                 {"bigredoff", "{font}{color}"},
             };
-            List<TextRun> textRuns = markdownParser.Parse(input).ToList();
+            List<TextRun> textRuns = markoutParser.Parse(input).ToList();
             textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
             Assert.AreEqual(5, textRuns.Count);
 
