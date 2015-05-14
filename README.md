@@ -104,3 +104,6 @@ The color name should be one recognized by the renderer used. So the Output.Inli
 
 ## a, anchor
 This is currently the only closed tag supported, so it will render as a hyperlink tag containing the text between the first {a} tag and the following tag.
+
+You can add additional tags inside the anchor content to control the text color, font, etc. 
+For example: {a::SomeAction}{c:Green}{u}Do Some Action{a} would render the anchor content in Green and underlined. The default Inlines rendering of an anchor is Blue underlined.
