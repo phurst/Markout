@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\ITagFactory.cs" />
+    <Compile Include="Parser\MacroDefinitionParser.cs" />
     <Compile Include="Parser\MacroExpander.cs" />
     <Compile Include="Parser\MarkoutParser.cs" />
     <Compile Include="Parser\ParserBase.cs" />
