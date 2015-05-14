@@ -52,11 +52,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TagParserTests.cs" />
+    <Compile Include="MarkoutParser\AnchorMarkoutParserTests.cs" />
+    <Compile Include="TagParser\TagParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MarkoutParserTests.cs" />
+    <Compile Include="MarkoutParser\MarkoutParserTests.cs" />
     <Compile Include="RegexTests.cs" />
     <Compile Include="MacroExpanderTests.cs" />
+    <Compile Include="TagParser\AnchorTagParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

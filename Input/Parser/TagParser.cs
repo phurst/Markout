@@ -23,6 +23,7 @@ namespace Markout.Input.Parser {
             new ColorTagFactory()  { TagRecognizer = "colour" },
             new AnchorTagFactory()  { TagRecognizer = "a" },
             new AnchorTagFactory()  { TagRecognizer = "anchor" },
+            new AnchorTagFactory()  { TagRecognizer = "hyperlink" },
         };
 
         public Dictionary<string, string> Macros { get; set; }

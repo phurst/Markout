@@ -4,13 +4,12 @@ using System.Drawing;
 using System.Linq;
 using Markout.Common.DataModel.Attribute;
 using Markout.Common.DataModel.Enumerations;
-using Markout.Input.Parser;
 using Markout.Input.Tags;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #pragma warning disable 219
 
-namespace Markout.Input.Tests {
+namespace Markout.Input.Tests.TagParser {
 
     [TestClass]
     public class TagParserTests {
@@ -19,7 +18,7 @@ namespace Markout.Input.Tests {
         public void TagParserParseSimpleTags() {
             string input = "1{b}2{i}3{u}4";
             string posit = "0123456789|123456789";
-            TagParser tagParser = new TagParser();
+            Parser.TagParser tagParser = new Parser.TagParser();
             List<Tag> tags = tagParser.Parse(input).ToList();
             Assert.IsTrue(tags.Any());
             tags.ForEach(t => Console.WriteLine("\t" + t.GetDescription()));
@@ -50,7 +49,7 @@ namespace Markout.Input.Tests {
         public void TagParserParseAdjacentSimpleTags() {
             string input = "1{b}{i}2{b}{u}3";
             string posit = "0123456789|123456789";
-            TagParser tagParser = new TagParser();
+            Parser.TagParser tagParser = new Parser.TagParser();
             List<Tag> tags = tagParser.Parse(input).ToList();
             Assert.IsTrue(tags.Any());
             tags.ForEach(t => Console.WriteLine("\t" + t.GetDescription()));
@@ -88,7 +87,7 @@ namespace Markout.Input.Tests {
         public void TagParserParseFontOnTag() {
             string input = "12{font:Times New Roman:10:b}2";
             string posit = "0123456789|123456789|123456789";
-            TagParser tagParser = new TagParser();
+            Parser.TagParser tagParser = new Parser.TagParser();
             List<Tag> tags = tagParser.Parse(input).ToList();
             Assert.IsTrue(tags.Any());
             tags.ForEach(t => Console.WriteLine("\t" + t.GetDescription()));
@@ -113,7 +112,7 @@ namespace Markout.Input.Tests {
         public void TagParserParseFontOffTag() {
             string input = "1{f}2";
             string posit = "0123456789|123456789|123456789";
-            TagParser tagParser = new TagParser();
+            Parser.TagParser tagParser = new Parser.TagParser();
             List<Tag> tags = tagParser.Parse(input).ToList();
             Assert.IsTrue(tags.Any());
             tags.ForEach(t => Console.WriteLine("\t" + t.GetDescription()));
@@ -130,7 +129,7 @@ namespace Markout.Input.Tests {
         public void TagParserParseColorOnTag() {
             string input = "123{c:Red}2";
             string posit = "0123456789|123456789|123456789";
-            TagParser tagParser = new TagParser();
+            Parser.TagParser tagParser = new Parser.TagParser();
             List<Tag> tags = tagParser.Parse(input).ToList();
             Assert.IsTrue(tags.Any());
             tags.ForEach(t => Console.WriteLine("\t" + t.GetDescription()));
@@ -151,7 +150,7 @@ namespace Markout.Input.Tests {
         public void TagParserParseColorOffTag() {
             string input = "123{colour}2";
             string posit = "0123456789|123456789|123456789";
-            TagParser tagParser = new TagParser();
+            Parser.TagParser tagParser = new Parser.TagParser();
             List<Tag> tags = tagParser.Parse(input).ToList();
             Assert.IsTrue(tags.Any());
             tags.ForEach(t => Console.WriteLine("\t" + t.GetDescription()));
@@ -162,66 +161,6 @@ namespace Markout.Input.Tests {
             Assert.AreEqual(11, tagC.TrailIndex);
 
             Assert.IsNotNull(tagC.Attribute);
-        }
-
-        [TestMethod]
-        public void TagParserParseAnchorOnTag() {
-            string input = "123{a:http://google.com/index.html}456";
-            string posit = "0123456789|123456789|123456789|123456789|123456789";
-            TagParser tagParser = new TagParser();
-            List<Tag> tags = tagParser.Parse(input).ToList();
-            Assert.IsTrue(tags.Any());
-            tags.ForEach(t => Console.WriteLine("\t" + t.GetDescription()));
-
-            Tag tagA = tags.FirstOrDefault(t => t.TextAttributeType == TextAttributeTypeEnum.Anchor);
-            Assert.IsNotNull(tagA);
-            Assert.AreEqual(3, tagA.StartIndex);
-            Assert.AreEqual(35, tagA.TrailIndex);
-
-            Assert.IsNotNull(tagA.Attribute);
-            TextAttributeAnchor taa = tagA.Attribute as TextAttributeAnchor;
-            Assert.IsNotNull(taa);
-            Assert.IsNotNull(taa.Uri);
-            Assert.AreEqual("http://google.com/index.html", taa.Uri.ToString());
-        }
-
-        [TestMethod]
-        public void TagParserParseAnchorOffTag() {
-            string input = "123{anchor}2";
-            string posit = "0123456789|123456789|123456789";
-            TagParser tagParser = new TagParser();
-            List<Tag> tags = tagParser.Parse(input).ToList();
-            Assert.IsTrue(tags.Any());
-            tags.ForEach(t => Console.WriteLine("\t" + t.GetDescription()));
-
-            Tag tagA = tags.FirstOrDefault(t => t.TextAttributeType == TextAttributeTypeEnum.Anchor);
-            Assert.IsNotNull(tagA);
-            Assert.AreEqual(3, tagA.StartIndex);
-            Assert.AreEqual(11, tagA.TrailIndex);
-
-            Assert.IsNotNull(tagA.Attribute);
-        }
-
-        [TestMethod]
-        public void TagParserParseWithNonUrlAnchorInfo() {
-            string input = "123{a:=BB(\"AA\",\"01/01/2015\"):ActionName}Hello{a}";
-            string posit = "0123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789";
-            TagParser tagParser = new TagParser();
-            List<Tag> tags = tagParser.Parse(input).ToList();
-            Assert.IsTrue(tags.Any());
-            tags.ForEach(t => Console.WriteLine("\t" + t.GetDescription()));
-
-            Tag tagA = tags.FirstOrDefault(t => t.TextAttributeType == TextAttributeTypeEnum.Anchor);
-            Assert.IsNotNull(tagA);
-            Assert.AreEqual(3, tagA.StartIndex);
-            Assert.AreEqual(40, tagA.TrailIndex);
-
-            Assert.IsNotNull(tagA.Attribute);
-            TextAttributeAnchor taa = tagA.Attribute as TextAttributeAnchor;
-            Assert.IsNotNull(taa);
-            Assert.IsNull(taa.Uri);
-            Assert.IsNotNull(taa.AnchorInfo);
-            Assert.AreEqual("=BB(\"AA\",\"01/01/2015\")", taa.AnchorInfo);
         }
     }
 }

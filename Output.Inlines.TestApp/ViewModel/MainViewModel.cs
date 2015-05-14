@@ -106,6 +106,11 @@ namespace Markout.Output.Inlines.TestApp.ViewModel {
             public void Execute(object parameter) {
                 ExecuteAction();
             }
+
+            protected virtual void OnCanExecuteChanged() {
+                var handler = CanExecuteChanged;
+                if (handler != null) handler(this, EventArgs.Empty);
+            }
         }
     }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using Markout.Common.DataModel.Attribute;
 using Markout.Common.DataModel.Elements;
 using Markout.Common.DataModel.Enumerations;
-using Markout.Input.Parser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Markout.Input.Tests {
+namespace Markout.Input.Tests.MarkoutParser {
 
     [TestClass]
     public class MarkoutParserTests {
@@ -15,7 +14,7 @@ namespace Markout.Input.Tests {
         [TestMethod]
         public void MarkoutParserParseSimpleTags() {
             string input = "0{b}1{i}2{u}3";
-            MarkoutParser markdownParser = new MarkoutParser();
+            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
             List<TextRun> textRuns = markdownParser.Parse(input).ToList();
             textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
             Assert.AreEqual(4, textRuns.Count);
@@ -50,7 +49,7 @@ namespace Markout.Input.Tests {
         [TestMethod]
         public void MarkoutParserOnAndOffSimpleTags() {
             string input = "0{b}1{b}2";
-            MarkoutParser markdownParser = new MarkoutParser();
+            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
             List<TextRun> textRuns = markdownParser.Parse(input).ToList();
             textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
             Assert.AreEqual(3, textRuns.Count);
@@ -75,7 +74,7 @@ namespace Markout.Input.Tests {
         [TestMethod]
         public void MarkoutParserOnAndOffAdjacentSimpleTags() {
             string input = "0{b}{u}1{b}2{u}{i}3";
-            MarkoutParser markdownParser = new MarkoutParser();
+            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
             List<TextRun> textRuns = markdownParser.Parse(input).ToList();
             textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
             Assert.AreEqual(4, textRuns.Count);
@@ -108,7 +107,7 @@ namespace Markout.Input.Tests {
         [TestMethod]
         public void MarkoutParserOverlapSimpleTags() {
             string input = "0{b}1{i}2{b}3{u}4{i}5";
-            MarkoutParser markdownParser = new MarkoutParser();
+            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
             List<TextRun> textRuns = markdownParser.Parse(input).ToList();
             textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
             Assert.AreEqual(6, textRuns.Count);
@@ -152,76 +151,9 @@ namespace Markout.Input.Tests {
         }
 
         [TestMethod]
-        public void MarkoutParserAnchorTerminated() {
-            string input = "0{a:http://www.phurst.com:ProcessUrl}1{a}2";
-            MarkoutParser markdownParser = new MarkoutParser();
-            List<TextRun> textRuns = markdownParser.Parse(input).ToList();
-            textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
-            Assert.AreEqual(3, textRuns.Count);
-
-            Assert.AreEqual("0", textRuns[0].Text);
-            Assert.AreEqual(0, textRuns[0].Attributes.Count());
-
-            Assert.AreEqual("1", textRuns[1].Text);
-            Assert.AreEqual(1, textRuns[1].Attributes.Count());
-            Assert.AreEqual(TextAttributeTypeEnum.Anchor, textRuns[1].Attributes.First().TextAttributeType);
-            TextAttributeAnchor taa = textRuns[1].Attributes.First() as TextAttributeAnchor;
-            Assert.IsNotNull(taa);
-            Assert.AreEqual("http://www.phurst.com/", taa.Uri.ToString());
-            Assert.AreEqual("ProcessUrl", taa.ActionName);
-
-            Assert.AreEqual("2", textRuns[2].Text);
-            Assert.AreEqual(0, textRuns[2].Attributes.Count());
-        }
-
-        [TestMethod]
-        public void MarkoutParserAnchorUnterminated() {
-            string input = "0{a:http://www.phurst.com:ProcessUrl}1";
-            MarkoutParser markdownParser = new MarkoutParser();
-            List<TextRun> textRuns = markdownParser.Parse(input).ToList();
-            textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
-            Assert.AreEqual(2, textRuns.Count);
-
-            Assert.AreEqual("0", textRuns[0].Text);
-            Assert.AreEqual(0, textRuns[0].Attributes.Count());
-
-            Assert.AreEqual("1", textRuns[1].Text);
-            Assert.AreEqual(1, textRuns[1].Attributes.Count());
-            Assert.AreEqual(TextAttributeTypeEnum.Anchor, textRuns[1].Attributes.First().TextAttributeType);
-            TextAttributeAnchor taa = textRuns[1].Attributes.First() as TextAttributeAnchor;
-            Assert.IsNotNull(taa);
-            Assert.AreEqual("http://www.phurst.com/", taa.Uri.ToString());
-            Assert.AreEqual("ProcessUrl", taa.ActionName);
-        }
-
-        [TestMethod]
-        public void MarkoutParserAnchorMalterminated() {
-            string input = "0{a:http://www.phurst.com:ProcessUrl}1{b}2";
-            MarkoutParser markdownParser = new MarkoutParser();
-            List<TextRun> textRuns = markdownParser.Parse(input).ToList();
-            textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
-            Assert.AreEqual(3, textRuns.Count);
-
-            Assert.AreEqual("0", textRuns[0].Text);
-            Assert.AreEqual(0, textRuns[0].Attributes.Count());
-
-            Assert.AreEqual("1", textRuns[1].Text);
-            Assert.AreEqual(1, textRuns[1].Attributes.Count());
-            Assert.AreEqual(TextAttributeTypeEnum.Anchor, textRuns[1].Attributes.First().TextAttributeType);
-            TextAttributeAnchor taa = textRuns[1].Attributes.First() as TextAttributeAnchor;
-            Assert.IsNotNull(taa);
-            Assert.AreEqual("http://www.phurst.com/", taa.Uri.ToString());
-            Assert.AreEqual("ProcessUrl", taa.ActionName);
-
-            Assert.AreEqual("2", textRuns[2].Text);
-            Assert.AreEqual(1, textRuns[2].Attributes.Count());
-            Assert.AreEqual(TextAttributeTypeEnum.Bold, textRuns[2].Attributes.First().TextAttributeType);
-        }
-
-        [TestMethod]
         public void MarkoutParserParseSimpleTagsWithMacros() {
             string input = "0{bolditalic}1{bolditalic}2{bigredon}3{bigredoff}4";
-            MarkoutParser markdownParser = new MarkoutParser();
+            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
             markdownParser.Macros = new Dictionary<string, string> {
                 {"bolditalic", "{b}{i}"},
                 {"bigredon", "{font:Times New Roman:24}{color:red}"},
