@@ -35,21 +35,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Markout.Common, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Markout.Common, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Markout.Output.Inlines.1.0.2.0\lib\net40\Markout.Common.dll</HintPath>
+      <HintPath>..\packages\Markout.Output.Inlines.1.1.0.0\lib\net40\Markout.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Markout.Input, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Markout.Input, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Markout.Input.1.0.3.0\lib\net40\Markout.Input.dll</HintPath>
+      <HintPath>..\packages\Markout.Input.1.1.0.0\lib\net40\Markout.Input.dll</HintPath>
     </Reference>
-    <Reference Include="Markout.Output.Inlines, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Markout.Output.Inlines, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Markout.Output.Inlines.1.0.2.0\lib\net40\Markout.Output.Inlines.dll</HintPath>
+      <HintPath>..\packages\Markout.Output.Inlines.1.1.0.0\lib\net40\Markout.Output.Inlines.dll</HintPath>
     </Reference>
-    <Reference Include="Markout.Output.Inlines.Controls, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Markout.Output.Inlines.Controls, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Markout.Output.Inlines.Controls.1.0.1.0\lib\net40\Markout.Output.Inlines.Controls.dll</HintPath>
+      <HintPath>..\packages\Markout.Output.Inlines.Controls.1.1.0.0\lib\net40\Markout.Output.Inlines.Controls.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

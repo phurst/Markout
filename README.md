@@ -81,15 +81,16 @@ Markout is available as a set of NuGet packages. Just search for Markout on http
 
 # Markout Tag Syntax in Detail
 
-Tag | Qualifiers | Descriptions | Example |
---- | ---------- | ------------ | ------- |
-b || Bold | {b} |
-i || Italic | {i} |
-u || Underline | {u} |
-f, font | Font Name<br> Font Size<br> Decorations (b, I, u) | Font | {f:Courier:12:bu}<br> {f:Courier:12}<br> {font:Courier} |
-c, color, colour | Color Name | Color | {c:DarkGreen} |
-a, anchor | Uri<br> Action Name | Hyperlink | {a:http://google.com:LaunchUrl}Google{a}<br> Renders as: Google |
-{{ || Escape |A tag looks like {{b}<br> Renders as: A tag looks like {b} |
+| Tag | Qualifiers | Descriptions | Example |
+| --- | ---------- | ------------ | ------- |
+| b || Bold | {b} |
+| i || Italic | {i} |
+| u || Underline | {u} |
+| 0 || Zap (remove all attributes) | {u}{b}underlinebold{0}plain |
+| f, font | Font Name<br> Font Size<br> Decorations (b, I, u) | Font | {f:Courier:12:bu}<br> {f:Courier:12}<br> {font:Courier} |
+| c, color, colour | Color Name | Color | {c:DarkGreen} |
+| a, anchor, hyperlink | Uri<br> Action Name | Hyperlink | {a:http://google.com:LaunchUrl}Google{a}<br> Renders as: Google |
+| {{ || Escape |A tag looks like {{b}<br> Renders as: A tag looks like {b} |
 
 
 # Notes

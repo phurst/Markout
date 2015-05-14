@@ -82,6 +82,7 @@ namespace Markout.Output.Inlines {
                             TextAttributeFont taFont = a as TextAttributeFont;
                             if (taFont != null) {
                                 if (taFont.Font != null) {
+                                    TextDecorationCollection textDecorations = new TextDecorationCollection(); // Freezable
                                     run.FontFamily = new FontFamily(taFont.Font.FontFamily.Name);
                                     run.FontSize = taFont.Font.Size;
                                     if (taFont.Font.Style.HasFlag(System.Drawing.FontStyle.Bold)) {
@@ -91,11 +92,12 @@ namespace Markout.Output.Inlines {
                                         run.FontStyle = FontStyles.Italic;
                                     }
                                     if (taFont.Font.Style.HasFlag(System.Drawing.FontStyle.Strikeout)) {
-                                        run.TextDecorations.Add(TextDecorations.Strikethrough);
+                                        textDecorations.Add(TextDecorations.Strikethrough);
                                     }
                                     if (taFont.Font.Style.HasFlag(System.Drawing.FontStyle.Underline)) {
-                                        run.TextDecorations.Add(TextDecorations.Underline);
+                                        textDecorations.Add(TextDecorations.Underline);
                                     }
+                                    run.TextDecorations = new TextDecorationCollection(textDecorations); // Freezable
                                 } else {
                                     run.FontFamily = new FontFamily();
                                     run.FontSize = 12;
