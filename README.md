@@ -11,59 +11,73 @@ Is a simple text markup language that is designed to meet the following goals:
 
 # Tag Syntax
 
-All Markout tags are of the form {tag}. This makes it very easy to identify tags in the input text, which makes the parser very simple. An example is the bold tag: {b}. 
+All Markout tags are of the form `{tag}`. This makes it easy to identify tags in the input text, so the parser can be rather simple. For example the bold tag is: `{b}`. 
 
-Some tags require information in addition to a basic tag name. These are of the form {tagname:qualifier1:qualifier2:…}. An example is the color tag: {color:red}.
+Some tags require information in addition to a basic tag name. These are of the form `{tagname:qualifier1:qualifier2:…}`. Fo example the color tag: {color:red}.
 
-Repeating a tag turns it off. For example plain{b}bold{b}plain. Or: BLACK{color:red}RED{color}BLACK.
+Repeating a tag turns it off. For example `plain{b}bold{b}plain`. Or: `BLACK{color:red}RED{color}BLACK`.
 
-In this first version I provide a very limited set of tags, but expect to add more and the need becomes apparent.
+In this first version I provide a limited set of tags, but expect to add more as the need becomes apparent.
 
 # Tag Synonyms
 
-I generally prefer very short tags, such a {b} for bold, or {i} for italic. Markdown supports synonyms for tags, so for instance {c:…},{color:…} and {colour:…} can be used interchangeably.
+I generally prefer very short tags, such as `{b}` for bold, or `{i}` for italic. Markdown supports synonyms for tags, so for instance `{c:red}`, `{color:red}`, and `{colour:red}` can be used interchangeably.
 
 # Extensibility
 
-The Markout tag syntax is regular and very simple. That makes the parser very simple. A glance at the TagParser class should give an idea of how easy this makes it to extend Markout to incorporate new tags.
+Because tags are consistent and the parser simple, its pretty easy to add new tags.
 
 # Flexible Output Mechanism
 
-Markout converts the input text into a set of attributed TextRun instances. This intermediate form makes it quite simple to add additional renderers. I provide a renderer to create sets of Inlines that can be applied to a WPF TextBlock. An HTML renderer would be an obvious addition.
+Markout converts the input text into a set of attributed `TextRun` instances. 
+This intermediate form makes it quite simple to add new renderers. 
+I provide a renderer to turn a set of `TextRun`s into a set of Inlines that can be applied to a WPF TextBlock. 
+An HTML renderer would be an obvious potential addition.
 
 # Support for Macros
 
-Markout supports the notion of macros. A macro is a named tag that is expanded into other tags when rendered. For example you might define a tag {code} to be represented as {font:Courier:10}{color:DarkGrey}. 
+Markout supports the notion of macros. A macro is a named tag that is expanded into other tags when rendered. 
+For example you might define a macro `{code}` to be equal to `{font:Courier:10}{color:Grey}`. 
+You could then use the macro thusly: `{code}int i = 0;{code}` to show the text in Courier / Grey.
 
 Macros are  supplied as a dictionary to the MarkoutParser, which expands them into the input text.
+
+I also supply a `MacroDefinitionParser` that can read macro definitions from a file or string.
 
 # Code Structure
 
 The Markout code contains the following main elements:
 
-## TagParser
-
-The TagParser class identifies Markout tags in the input text and creates a set of Tag objects. The Tag object keeps track of its location in the text and has an attribute that specifies the type of tag it represents and any collateral information (such as the color name in a color tag).
-
 ## MarkoutParser
 
-The MarkoutParser class uses the TagParser to locate the tags in the input text and then chops the text up into a set of TextRun instances, combining attributes as necessary. 
+The `MarkoutParser` class (in the Markout.Input namespace) uses the `TagParser` to locate the tags in the input text and 
+then chops the text up into a set of `TextRun` instances, combining attributes as necessary. 
+The output of the `MarkoutParser` is a set of `TextRun` instances.
 
-For instance, the input text plain{b}{i}bolditalic would be output as two TextRun instances: the first would have text “plain” and no attributes; the second would have text “bolditalic” and bold an italic attributes.
+For example, the input text `plain{b}{i}bolditalic` would be parsed and output as two TextRun instances: 
+* The first TextRun would have text “plain” and no attributes.
+* The second TextRun would have text “bolditalic” and bold an italic attributes.
 
-The TextRun instances emitted by the MarkoutParser class are sent to another class to render them into the desired output form. 
+The TextRun instances emitted by the `MarkoutParser` class are sent to another class to render them into the desired output form. 
 
-You can supply a dictionary of macros to the MarkoutParser if desired.
+If you provide a set of macros to the `MarkoutParser` it will locate and expand them in the input text before parsing it.
 
 ## MarkoutRenderer
 
-The MarkoutRenderer class (in the Markout.Output.Inlines namespace) takes a set of TextRun instances produced by the MarkoutParser and renders them into a set of Inlines which may then be assigned to the Inlines property of a WPF TextBlock.
+The `MarkoutRenderer` class (in the Markout.Output.Inlines namespace) takes as input a set of TextRun instances 
+produced by the `MarkoutParser` and renders them into a set of `Inline`s which may then be assigned to the `Inlines` 
+property of a WPF `TextBlock`.
 
-The anchor tag is rendered as a hypertext element in the Inlines. You can provide a set of named actions to be associated, with anchor tags, and called when the anchor tag is clicked.
+The anchor tag is rendered as a `Hypertext` element in the Inlines. 
+You can provide the `MarkoutRenderer` with a set of named `Action`s to be associated, with anchor tags and
+the appropriate `Action` will be called when the `Hypertext` element is clicked.
 
 ## Controls
 
-The Inlines.TextBlock control is a subclass of the WPF TextBlock that exposes a TextInlines property that can be bound to an observable collection of Inline elements in a View Model class. See the Output.Inlines.TestApp application for an example of this in action.
+The `InlinesTextBlock` control is a subclass of the WPF `TextBlock` that exposes a `TextInlines` property.
+You can bind the `TextInlines` property to an observable collection of Inline elements in a View Model class. 
+
+See the Output.Inlines.Sample application for an example of this in action.
 
 ## Tests
 
@@ -74,6 +88,14 @@ A WPF application (Output.Inlines.TestApp) is provided to visualize the effect o
 ## Sample Code
 
 The Markout.Output.Inlines.Sample project contains a minimal WPF application that illustrates how Markout can be used.
+
+The easiest way of getting started is:
+* Create a VS solution containg a WPF Application project called "Markout.Output.Inlines.Sample". 
+* Delete all the classes in that project.
+* In Manage NuGet Packages for the project add the Markout.Output.Inlines.Sample NuGet package.
+* You should now be able to compile the project and run the app.
+
+The Output.Inlines.TestApp provides a slightly more sophisticated example.
 
 # NuGet
 
@@ -87,7 +109,7 @@ Markout is available as a set of NuGet packages. Just search for Markout on http
 | i || Italic | {i} |
 | u || Underline | {u} |
 | 0 || Zap (remove all attributes) | {u}{b}underlinebold{0}plain |
-| f, font | Font Name<br> Font Size<br> Decorations (b, I, u) | Font | {f:Courier:12:bu}<br> {f:Courier:12}<br> {font:Courier} |
+| f, font | Font Name<br> Font Size<br> Decorations&nbsp;(b, I, u) | Font | {f:Courier:12:bu}<br> {f:Courier:12}<br> {font:Courier} |
 | c, color, colour | Color Name | Color | {c:DarkGreen} |
 | a, anchor, hyperlink | Uri<br> Action Name | Hyperlink | {a:http://google.com:LaunchUrl}Google{a}<br> Renders as: Google |
 | {{ || Escape |A tag looks like {{b}<br> Renders as: A tag looks like {b} |
@@ -97,13 +119,18 @@ Markout is available as a set of NuGet packages. Just search for Markout on http
 
 ## f, font
 
-The font name should be one recognized by the renderer used. So the Output.Inlines.MarkoutRenderer class expects WPF FontFamily names. 
+The font name should be one recognized by the renderer used. 
+So the Output.Inlines.MarkoutRenderer class expects WPF FontFamily names. 
 
 ## c, color
-The color name should be one recognized by the renderer used. So the Output.Inlines.MarkoutRenderer class expects WPF KnownColor names, or a hexadecimal number that can be passed to the Color.FromArgb method.
+The color name should be one recognized by the renderer used. 
+So the Output.Inlines.MarkoutRenderer class expects WPF KnownColor names, or a hexadecimal number 
+that can be passed to the Color.FromArgb method.
 
 ## a, anchor
-This is currently the only closed tag supported, so it will render as a hyperlink tag containing the text between the first {a} tag and the following tag.
+This is currently the only closed tag supported, so it will render as a hyperlink tag containing 
+the text between the first `{a}` tag and the following `{a}` tag.
 
 You can add additional tags inside the anchor content to control the text color, font, etc. 
-For example: {a::SomeAction}{c:Green}{u}Do Some Action{a} would render the anchor content in Green and underlined. The default Inlines rendering of an anchor is Blue underlined.
+For example: `{a::SomeAction}{c:Green}{u}Do Some Action{a}` would render the anchor content in Green and underlined. 
+The default Inlines rendering of an anchor is Blue underlined.
