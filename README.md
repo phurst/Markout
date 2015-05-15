@@ -92,8 +92,8 @@ The Markout.Output.Inlines.Sample project contains a minimal WPF application tha
 The easiest way of getting started is:
 * Create a VS solution containg a WPF Application project called "Markout.Output.Inlines.Sample". 
 * Delete the following files in that project:
-** MainWindow.xaml
-** MainWindow.xaml.cs
+  * MainWindow.xaml
+  * MainWindow.xaml.cs
 * In Manage NuGet Packages for the project add the Markout.Output.Inlines.Sample NuGet package.
 * You should now be able to compile the project and run the app.
 
