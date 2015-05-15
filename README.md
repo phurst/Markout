@@ -91,9 +91,15 @@ The Markout.Output.Inlines.Sample project contains a minimal WPF application tha
 
 The easiest way of getting started is:
 * Create a VS solution containg a WPF Application project called "Markout.Output.Inlines.Sample". 
-* Delete all the classes in that project.
+* Delete the following files in that project:
+** MainWindow.xaml
+** MainWindow.xaml.cs
 * In Manage NuGet Packages for the project add the Markout.Output.Inlines.Sample NuGet package.
 * You should now be able to compile the project and run the app.
+
+The app shows two text areas:
+* The top one contains some input text with Markout tags.
+* The TextBlock below shows the rendered result.
 
 The Output.Inlines.TestApp provides a slightly more sophisticated example.
 
@@ -109,8 +115,8 @@ Markout is available as a set of NuGet packages. Just search for Markout on http
 | i || Italic | {i} |
 | u || Underline | {u} |
 | 0 || Zap (remove all attributes) | {u}{b}underlinebold{0}plain |
-| f, font | Font Name<br> Font Size<br> Decorations&nbsp;(b, I, u) | Font | {f:Courier:12:bu}<br> {f:Courier:12}<br> {font:Courier} |
-| c, color, colour | Color Name | Color | {c:DarkGreen} |
+| f, font | Font&nbsp;Name<br>Font&nbsp;Size<br>Decorations&nbsp;(b, I, u) | Font | {f:Courier:12:bu}<br> {f:Courier:12}<br> {font:Courier} |
+| c, color, colour | Color&nbsp;Name | Color | {c:DarkGreen} |
 | a, anchor, hyperlink | Uri<br> Action Name | Hyperlink | {a:http://google.com:LaunchUrl}Google{a}<br> Renders as: Google |
 | {{ || Escape |A tag looks like {{b}<br> Renders as: A tag looks like {b} |
 
@@ -120,12 +126,12 @@ Markout is available as a set of NuGet packages. Just search for Markout on http
 ## f, font
 
 The font name should be one recognized by the renderer used. 
-So the Output.Inlines.MarkoutRenderer class expects WPF FontFamily names. 
+So the `Output.Inlines.MarkoutRenderer` class expects WPF FontFamily names. 
 
 ## c, color
 The color name should be one recognized by the renderer used. 
-So the Output.Inlines.MarkoutRenderer class expects WPF KnownColor names, or a hexadecimal number 
-that can be passed to the Color.FromArgb method.
+So the `Output.Inlines.MarkoutRenderer` class expects WPF `KnownColor` names, or a hexadecimal number 
+that can be passed to the `Color.FromArgb` method.
 
 ## a, anchor
 This is currently the only closed tag supported, so it will render as a hyperlink tag containing 
