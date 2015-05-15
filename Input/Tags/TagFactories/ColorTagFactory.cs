@@ -15,24 +15,10 @@ namespace Markout.Input.Tags.TagFactories {
             if (tagGroup == null) {
                 throw new ApplicationException(string.Format("The ColorTagFactory cannot find the tag group in the match"));
             }
-            TextAttributeTypeEnum textAttributeType = TextAttributeTypeEnum.None;
-            switch (TagRecognizer) {
-                case "c":
-                    textAttributeType = TextAttributeTypeEnum.Color;
-                    break;
-                case "color":
-                    textAttributeType = TextAttributeTypeEnum.Color;
-                    break;
-                case "colour":
-                    textAttributeType = TextAttributeTypeEnum.Color;
-                    break;
-                default:
-                    throw new ApplicationException(string.Format("The ColorTagFactory was asked to create a Tag from a match of '{0}'", TagRecognizer));
-            }
             Group qualifierGroup = match.Groups["qualifier"];
             if (qualifierGroup == null || qualifierGroup.Length == 0) {
                 return new Tag {
-                    TextAttributeType = textAttributeType,
+                    TextAttributeType = TextAttributeType,
                     StartIndex = tagGroup.Index - 1,
                     TrailIndex = tagGroup.Index + tagGroup.Length + 1,
                 };
@@ -54,7 +40,7 @@ namespace Markout.Input.Tags.TagFactories {
             if (s.Length > 0 && Char.IsLower(s.First())) {
                 s = Char.ToUpper(s.First()) + s.Substring(1);
             }
-            if (KnownColor.TryParse(s, out color)) {
+            if (Enum.TryParse(s, out color)) {
                 return new TextAttributeColor { Color = Color.FromName(color.ToString()), };
             }
 

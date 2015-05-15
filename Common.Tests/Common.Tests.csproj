@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -51,7 +52,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Attribute\TextAttributeFontTests.cs" />
+    <Compile Include="Attribute\TextAttributeTests.cs" />
+    <Compile Include="Attribute\TextAttributeAnchorTests.cs" />
+    <Compile Include="Attribute\TextAttributeColorTests.cs" />
+    <Compile Include="Elements\TextRunTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{3fc0099c-d9ca-4549-a3b0-1a19f06cb86c}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -16,6 +16,11 @@ namespace Markout.Input.Parser {
             _macros = macros;
         }
 
+        /// <summary>
+        /// Returns the string s with any macros in it expanded.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public string ExpandMacros(string s) {
             if(s == null) throw new ArgumentNullException("s");
             StringBuilder rv = new StringBuilder();

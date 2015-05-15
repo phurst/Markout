@@ -1,11 +1,12 @@
 using System.Text.RegularExpressions;
+using Markout.Common.DataModel.Enumerations;
 using Markout.Input.Tags;
 
 namespace Markout.Input.Interfaces {
 
     public interface ITagFactory {
 
-        string TagRecognizer { get; set; }
+        TextAttributeTypeEnum TextAttributeType { get; set; }
         Tag CreateTagFromMatch(Match match);
     }
 }

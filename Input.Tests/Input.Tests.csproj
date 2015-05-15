@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BasicTests\TagTests.cs" />
     <Compile Include="MacroDefinitionParser\MacroDefinitionParserTests.cs" />
     <Compile Include="MarkoutParser\AnchorMarkoutParserTests.cs" />
     <Compile Include="MarkoutParser\MarkoutParserMacroTests.cs" />

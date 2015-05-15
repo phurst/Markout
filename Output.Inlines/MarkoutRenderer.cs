@@ -17,11 +17,20 @@ namespace Markout.Output.Inlines {
         private Inline _currInline = null;
         private Dictionary<string, Action<TextAttributeAnchor, string>> _anchorActions = null;
 
+        /// <summary>
+        /// Convert the specified set of text runs into a set of Inlines, suitable for use
+        /// in a WPF TextBlock. If the textRuns contain any anchor attributes they will
+        /// be rendered as Hyperlinks and, when clicked, will attempts to call back to
+        /// the anchorActions entry associated with the ActionName in the anchor attribute.
+        /// </summary>
+        /// <param name="textRuns"></param>
+        /// <param name="anchorActions"></param>
+        /// <returns></returns>
         public IEnumerable<Inline> Render(
             IEnumerable<TextRun> textRuns,
             Dictionary<string, Action<TextAttributeAnchor, string>> anchorActions = null
             ) {
-                _textRuns = new Queue<TextRun>(textRuns);
+            _textRuns = new Queue<TextRun>(textRuns);
             _inlines.Clear();
             _currInline = null;
             _anchorActions = anchorActions;
@@ -29,7 +38,7 @@ namespace Markout.Output.Inlines {
             return _inlines.AsEnumerable();
         }
 
-        public void ProcessRuns() {
+        private void ProcessRuns() {
             while (_textRuns.Any()) {
                 ProcessNextRun(_textRuns.Dequeue());
             }

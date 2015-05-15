@@ -12,8 +12,17 @@ namespace Markout.Input.Parser {
     
     public class MarkoutParser {
 
+        /// <summary>
+        /// Optional macros to be located and then expanded in the text.
+        /// </summary>
         public Dictionary<string, string> Macros { get; set; }
 
+        /// <summary>
+        /// Find the tags in the text and then extract the intervening TextRuns complet with
+        /// tag attributes.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public IEnumerable<TextRun> Parse(string text) {
             List<TextRun> textRuns = new List<TextRun>();
 
@@ -25,9 +34,9 @@ namespace Markout.Input.Parser {
             TextRun currentRun = new TextRun {Text = String.Empty};
             textRuns.Add(currentRun);
             Tag prevTag = new Tag {TextAttributeType = TextAttributeTypeEnum.None,};
-            TagParser tagParser = new TagParser {Macros = Macros};
+            TagParser tagParser = new TagParser();
             Queue<Tag> tags = new Queue<Tag>(tagParser.Parse(text));
-            while (tags.Any()) {
+            while (tags.Any() && prevTag != null) {
                 Tag tag = tags.Dequeue();
                 if (tag.Attribute.IsClosed) {
                     currentRun.Text = StripEscapes(text.Substring(prevTag.TrailIndex, tag.StartIndex - prevTag.TrailIndex));

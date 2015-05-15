@@ -14,21 +14,10 @@ namespace Markout.Input.Tags.TagFactories {
             if (tagGroup == null) {
                 throw new ApplicationException(string.Format("The FontTagFactory cannot find the tag group in the match"));
             }
-            TextAttributeTypeEnum textAttributeType = TextAttributeTypeEnum.None;
-            switch (TagRecognizer) {
-                case "f":
-                    textAttributeType = TextAttributeTypeEnum.Font;
-                    break;
-                case "font":
-                    textAttributeType = TextAttributeTypeEnum.Font;
-                    break;
-                default:
-                    throw new ApplicationException(string.Format("The FontTagFactory was asked to create a Tag from a match of '{0}'", TagRecognizer));
-            }
             Group qualifierGroup = match.Groups["qualifier"];
             if (qualifierGroup == null || qualifierGroup.Length == 0) {
                 return new Tag {
-                    TextAttributeType = textAttributeType,
+                    TextAttributeType = TextAttributeType,
                     StartIndex = tagGroup.Index - 1,
                     TrailIndex = tagGroup.Index + tagGroup.Length + 1,
                 };

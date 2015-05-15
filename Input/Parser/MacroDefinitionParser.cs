@@ -7,6 +7,14 @@ using System.Text;
 
 namespace Markout.Input.Parser {
     
+    /// <summary>
+    /// Extracts macro definitions from a file, or from text, which should be in the format:
+    /// <code>
+    /// macroname1 macrodfinition1
+    /// ...
+    /// macronameN macrodfinitionN
+    /// </code>
+    /// </summary>
     public class MacroDefinitionParser {
 
         public Dictionary<string, string> ParseMacroDefinitionsFromFile(string path) {

@@ -14,24 +14,10 @@ namespace Markout.Input.Tags.TagFactories {
             if (tagGroup == null) {
                 throw new ApplicationException(string.Format("The AnchorTagFactory cannot find the tag group in the match"));
             }
-            TextAttributeTypeEnum textAttributeType = TextAttributeTypeEnum.None;
-            switch (TagRecognizer) {
-                case "a":
-                    textAttributeType = TextAttributeTypeEnum.Anchor;
-                    break;
-                case "anchor":
-                    textAttributeType = TextAttributeTypeEnum.Anchor;
-                    break;
-                case "hyperlink":
-                    textAttributeType = TextAttributeTypeEnum.Anchor;
-                    break;
-                default:
-                    throw new ApplicationException(string.Format("The AnchorTagFactory was asked to create a Tag from a match of '{0}'", TagRecognizer));
-            }
             Group qualifierGroup = match.Groups["qualifier"];
             if (qualifierGroup == null || qualifierGroup.Length == 0) {
                 return new Tag {
-                    TextAttributeType = textAttributeType,
+                    TextAttributeType = TextAttributeType,
                     StartIndex = tagGroup.Index - 1,
                     TrailIndex = tagGroup.Index + tagGroup.Length + 1,
                 };

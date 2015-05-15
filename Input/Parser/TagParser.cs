@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Markout.Common.DataModel.Enumerations;
 using Markout.Input.Interfaces;
 using Markout.Input.Tags;
 using Markout.Input.Tags.TagFactories;
@@ -12,37 +13,36 @@ namespace Markout.Input.Parser {
 
     public class TagParser : ParserBase {
 
-        private static readonly ITagFactory[] TagFactories = {
-            new UnqualifiedTagFactory()  { TagRecognizer = "b" },
-            new UnqualifiedTagFactory()  { TagRecognizer = "i" },
-            new UnqualifiedTagFactory()  { TagRecognizer = "u" },
-            new UnqualifiedTagFactory()  { TagRecognizer = "0" },
-            new FontTagFactory()  { TagRecognizer = "f" },
-            new FontTagFactory()  { TagRecognizer = "font" },
-            new ColorTagFactory()  { TagRecognizer = "c" },
-            new ColorTagFactory()  { TagRecognizer = "color" },
-            new ColorTagFactory()  { TagRecognizer = "colour" },
-            new AnchorTagFactory()  { TagRecognizer = "a" },
-            new AnchorTagFactory()  { TagRecognizer = "anchor" },
-            new AnchorTagFactory()  { TagRecognizer = "hyperlink" },
+        private static readonly Dictionary<string, ITagFactory> Recognizers = new Dictionary<string, ITagFactory> {
+            {"b", new UnqualifiedTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Bold }},
+            {"i", new UnqualifiedTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Italic }},
+            {"u", new UnqualifiedTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Underline }},
+            {"0", new UnqualifiedTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Zero }},
+            {"f", new FontTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Font }},
+            {"font", new FontTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Font }},
+            {"c", new ColorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Color }},
+            {"color", new ColorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Color }},
+            {"colour", new ColorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Color }},
+            {"a", new AnchorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Anchor }},
+            {"anchor", new AnchorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Anchor }},
+            {"hyperlink", new AnchorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Anchor }},
         };
 
-        public Dictionary<string, string> Macros { get; set; }
-
+        /// <summary>
+        /// Find the Tags in the specified text.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public IEnumerable<Tag> Parse(string text) {
             List<Tag> rv = new List<Tag>();
-
-            Dictionary<string, ITagFactory> recognizers = new Dictionary<string, ITagFactory>();
-            TagFactories.ToList().ForEach(tf => recognizers.Add(tf.TagRecognizer, tf));
-
-            Regex regex = new Regex(RegexHead + string.Join("|", recognizers.Keys) + RegexTail);
+            Regex regex = new Regex(RegexHead + string.Join("|", Recognizers.Keys) + RegexTail);
             MatchCollection matches = regex.Matches(text);
             foreach (Match match in matches) {
                 if (match.Success) {
                     Group tagGroup = match.Groups["tag"];
                     if (tagGroup != null) {
                         ITagFactory tagFactory;
-                        if (recognizers.TryGetValue(tagGroup.Value, out tagFactory)) {
+                        if (Recognizers.TryGetValue(tagGroup.Value, out tagFactory)) {
                             rv.Add(tagFactory.CreateTagFromMatch(match));
                         } else {
                             throw new ApplicationException(string.Format("Can't find tag factory for tag '{0}'", tagGroup.Value));

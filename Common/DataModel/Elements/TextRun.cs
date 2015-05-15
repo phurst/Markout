@@ -7,25 +7,42 @@ using Markout.Common.DataModel.Enumerations;
 
 namespace Markout.Common.DataModel.Elements {
 
-    public class TextRun : IEquatable<TextRun> {
+    public class TextRun {
 
         private List<BaseTextAttribute> _attributes = new List<BaseTextAttribute>();
 
-        public IEnumerable<BaseTextAttribute> Attributes {
+        public IEnumerable<BaseTextAttribute> Attributes
+        {
             get { return _attributes.AsEnumerable(); }
             set { _attributes = value.ToList(); }
         }
 
         public string Text { get; set; }
 
+        /// <summary>
+        /// Get all the attributes from other by calling GetAttribute for each one.
+        /// </summary>
+        /// <param name="other"></param>
         public void GetAttributesFrom(TextRun other) {
-            other.Attributes.ToList().ForEach(GetAttribute);
+            // other.Attributes.ToList().ForEach(GetAttribute);
+            GetAttributesFrom(other.Attributes);
         }
 
+        /// <summary>
+        /// Get the atributes by calling GetAttribute for each one. 
+        /// </summary>
+        /// <param name="attributes"></param>
         public void GetAttributesFrom(IEnumerable<BaseTextAttribute> attributes) {
             attributes.ToList().ForEach(GetAttribute);
         }
 
+        /// <summary>
+        /// <para>
+        /// If this TextRun does not have an attribute with the same TextAttributeType as attribute, add
+        /// attribute to the _attributes collection, otherwise remove the existing attribute of that type.
+        /// </para>
+        /// </summary>
+        /// <param name="attribute"></param>
         public void GetAttribute(BaseTextAttribute attribute) {
             BaseTextAttribute extantTextAttribute = _attributes.FirstOrDefault(a => a.TextAttributeType == attribute.TextAttributeType);
             if (extantTextAttribute != null) {
@@ -40,39 +57,6 @@ namespace Markout.Common.DataModel.Elements {
             b.AppendFormat("Run Text=[{0}]", Text ?? "<none>");
             b.AppendFormat(" Attributes: {0}", string.Join(", ", Attributes.Select(a => a.ToString())));
             return b.ToString();
-        }
-
-        public override bool Equals(object obj) {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((TextRun)obj);
-        }
-
-        public bool Equals(TextRun other) {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            bool attributesEqual = false;
-            if (_attributes == null && other.Attributes == null) {
-                attributesEqual = true;
-            } else if (_attributes != null && other.Attributes != null && _attributes.Count == other._attributes.Count) {
-                if (_attributes.Count == 0) {
-                    attributesEqual = true;
-                } else {
-                    attributesEqual = _attributes.All(a => other._attributes.Any(a1 => Equals(a, a1)));
-                }
-            }
-            return attributesEqual && string.Equals(Text, other.Text);
-        }
-
-        public override int GetHashCode() {
-            unchecked {
-                int hash = 0;
-                if (_attributes != null) {
-                    _attributes.ToList().ForEach(a => hash = (a.GetHashCode()*397) ^ hash);
-                }
-                return (hash ^ (Text != null ? Text.GetHashCode() : 0));
-            }
         }
     }
 }

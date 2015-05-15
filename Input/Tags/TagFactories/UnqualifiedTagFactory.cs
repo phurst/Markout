@@ -12,25 +12,9 @@ namespace Markout.Input.Tags.TagFactories {
             if (tagGroup == null) {
                 throw new ApplicationException(string.Format("The SimpleTagFactory cannot find the tag group in the match"));
             }
-            TextAttributeTypeEnum textAttributeType = TextAttributeTypeEnum.None;
-            switch (TagRecognizer) {
-                case "b":
-                    textAttributeType = TextAttributeTypeEnum.Bold;
-                    break;
-                case "i":
-                    textAttributeType = TextAttributeTypeEnum.Italic;
-                    break;
-                case "u":
-                    textAttributeType = TextAttributeTypeEnum.Underline;
-                    break;
-                case "0":
-                    textAttributeType = TextAttributeTypeEnum.Zero;
-                    break;
-                default:
-                    throw new ApplicationException(string.Format("The SimpleTagFactory was asked to create a Tag from a match of '{0}'", TagRecognizer));
-            }
+
             return new Tag {
-                TextAttributeType = textAttributeType,
+                TextAttributeType = TextAttributeType,
                 StartIndex = tagGroup.Index - 1,
                 TrailIndex = tagGroup.Index + tagGroup.Length + 1,
             };

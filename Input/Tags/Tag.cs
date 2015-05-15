@@ -21,7 +21,6 @@ namespace Markout.Input.Tags {
         }
 
         public BaseTextAttribute Attribute { get; set; }
-        public string Content { get; set; }
         public int StartIndex { get; set; }
         public int TrailIndex { get; set; } // Index of character following the end of this tag
 
