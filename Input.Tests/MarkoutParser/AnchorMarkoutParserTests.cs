@@ -35,6 +35,29 @@ namespace Markout.Input.Tests.MarkoutParser {
         }
 
         [TestMethod]
+        public void MarkoutParserAnchorSansUrlTerminated() {
+            string input = "0{a::DoSomething}1{a}2";
+            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
+            List<TextRun> textRuns = markdownParser.Parse(input).ToList();
+            textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
+            Assert.AreEqual(3, textRuns.Count);
+
+            Assert.AreEqual("0", textRuns[0].Text);
+            Assert.AreEqual(0, textRuns[0].Attributes.Count());
+
+            Assert.AreEqual("1", textRuns[1].Text);
+            Assert.AreEqual(1, textRuns[1].Attributes.Count());
+            Assert.AreEqual(TextAttributeTypeEnum.Anchor, textRuns[1].Attributes.First().TextAttributeType);
+            TextAttributeAnchor taa = textRuns[1].Attributes.First() as TextAttributeAnchor;
+            Assert.IsNotNull(taa);
+            Assert.IsNull(taa.Uri);
+            Assert.AreEqual("DoSomething", taa.ActionName);
+
+            Assert.AreEqual("2", textRuns[2].Text);
+            Assert.AreEqual(0, textRuns[2].Attributes.Count());
+        }
+
+        [TestMethod]
         public void MarkoutParserAnchorUnterminated() {
             string input = "0{a:http://www.phurst.com:ProcessUrl}1";
             Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
