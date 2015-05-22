@@ -3,5 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:view="clr-namespace:Markout.Output.Inlines.TestApp.View"
         Title="MainWindow" Height="500" Width="900">
-    <view:MainView x:Name="MainView" />
+    <TabControl>
+        <TabItem Header="Main UI">
+            <view:MainView x:Name="MainView" />
+        </TabItem>
+        <TabItem Header="Experimental">
+            <view:ExperimentalView x:Name="ExperimentalView"/>
+        </TabItem>
+    </TabControl>
 </Window>
