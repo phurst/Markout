@@ -14,16 +14,16 @@
 
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" FontWeight="ExtraBold">EXPERIMENTAL</TextBlock>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Background="White">
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Background="LightGoldenrodYellow">
             <TextBlock.Inlines>
                 <Run>This is a run.</Run>
                 <InlineUIContainer>
-                    <RichTextBox Width="150" BorderThickness="1" >
-                        <FlowDocument LineHeight="2">
+                    <RichTextBox Width="150" BorderThickness="0" Background="Transparent">
+                        <FlowDocument LineHeight="3">
                             <Paragraph >
                                 <Run>Paragraph 1</Run>
                             </Paragraph>
-                            <Paragraph Padding="0" Margin="15,0" TextAlignment="Left" >
+                            <Paragraph Padding="0" Margin="30,0" TextAlignment="Left" >
                                 <Run>Paragraph 2</Run>
                                 <LineBreak/>
                                 <Run>Line 2</Run>
