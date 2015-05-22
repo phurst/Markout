@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using Markout.Common.DataModel.Attribute;
 using Markout.Common.DataModel.Elements;
 using Markout.Common.DataModel.Enumerations;
+using Color = System.Windows.Media.Color;
+using FontFamily = System.Windows.Media.FontFamily;
 
 namespace Markout.Output.Inlines {
 
@@ -48,6 +52,9 @@ namespace Markout.Output.Inlines {
             if (textRun.Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Anchor)) {
                 _currInline = ProcessAnchorTextRun(textRun);
                 _inlines.Add(_currInline);
+            } else if (textRun.Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Paragraph)) {
+                _currInline = ProcessParagraphTextRun(textRun);
+                _inlines.Add(_currInline);
             } else if (!string.IsNullOrEmpty(textRun.Text)) {
                 _currInline = ProcessAttributes(textRun.Attributes, new Run(textRun.Text));
                 _inlines.Add(_currInline);
@@ -73,6 +80,16 @@ namespace Markout.Output.Inlines {
                 ProcessAttributes(textRun.Attributes.Except(new BaseTextAttribute[] { taa }), hyperlink);
             }
             return hyperlink;
+        }
+
+        private Inline ProcessParagraphTextRun(TextRun textRun) {
+            TextAttributeParagraph taa = textRun.Attributes.FirstOrDefault(ta => ta.TextAttributeType == TextAttributeTypeEnum.Paragraph) as TextAttributeParagraph;
+            if (taa == null) {
+                throw new ApplicationException("ProcessParagraphTextRun cannot process a runs lacking an Paragraph attribute");
+            }
+            Run run = new Run(textRun.Text);
+            run.Background = new SolidColorBrush(Colors.Yellow);
+            return run;
         }
 
         private Inline ProcessAttributes(IEnumerable<BaseTextAttribute> attributes, Inline run) {

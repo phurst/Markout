@@ -18,14 +18,15 @@ namespace Markout.Input.Parser {
             {"i", new UnqualifiedTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Italic }},
             {"u", new UnqualifiedTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Underline }},
             {"0", new UnqualifiedTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Zero }},
-            {"f", new FontTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Font }},
-            {"font", new FontTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Font }},
-            {"c", new ColorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Color }},
-            {"color", new ColorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Color }},
-            {"colour", new ColorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Color }},
             {"a", new AnchorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Anchor }},
             {"anchor", new AnchorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Anchor }},
             {"hyperlink", new AnchorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Anchor }},
+            {"c", new ColorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Color }},
+            {"color", new ColorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Color }},
+            {"colour", new ColorTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Color }},
+            {"p", new ParagraphTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Paragraph }},
+            {"f", new FontTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Font }},
+            {"font", new FontTagFactory()  { TextAttributeType = TextAttributeTypeEnum.Font }},
         };
 
         /// <summary>

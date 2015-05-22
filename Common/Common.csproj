@@ -44,6 +44,7 @@
     <Compile Include="DataModel\Attribute\BaseTextAttribute.cs" />
     <Compile Include="DataModel\Attribute\TextAttribute.cs" />
     <Compile Include="DataModel\Attribute\TextAttributeAnchor.cs" />
+    <Compile Include="DataModel\Attribute\TextAttributeParagraph.cs" />
     <Compile Include="DataModel\Attribute\TextAttributeColor.cs" />
     <Compile Include="DataModel\Attribute\TextAttributeFont.cs" />
     <Compile Include="DataModel\Elements\TextRun.cs" />

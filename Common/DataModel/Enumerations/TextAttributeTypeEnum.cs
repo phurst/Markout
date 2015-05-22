@@ -7,6 +7,7 @@
         Color,
         Font,
         Italic,
+        Paragraph,
         Underline,
         Zero,
     };

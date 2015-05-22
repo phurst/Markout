@@ -46,6 +46,7 @@
     <Compile Include="Parser\MacroExpander.cs" />
     <Compile Include="Parser\MarkoutParser.cs" />
     <Compile Include="Parser\ParserBase.cs" />
+    <Compile Include="Tags\TagFactories\ParagraphTagFactory.cs" />
     <Compile Include="Tags\TagFactories\ColorTagFactory.cs" />
     <Compile Include="Tags\TagFactories\AnchorTagFactory.cs" />
     <Compile Include="Tags\TagFactories\FontTagFactory.cs" />
