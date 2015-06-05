@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -35,7 +36,10 @@ namespace Markout.Input.Tags.TagFactories {
             if (string.IsNullOrWhiteSpace(qualifier)) {
                 throw new ApplicationException(string.Format("The ParagraphTagFactory qualifer is empty"));
             }
-
+            int leftMargin;
+            if (int.TryParse(qualifier, out leftMargin)) {
+                return new TextAttributeParagraph { Margins = new Margins(leftMargin, 0, 0, 0), };
+            }
             return new TextAttributeParagraph();
         }
     }

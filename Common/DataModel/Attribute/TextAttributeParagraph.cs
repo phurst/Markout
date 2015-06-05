@@ -11,7 +11,16 @@ namespace Markout.Common.DataModel.Attribute {
 
         public TextAttributeParagraph() {
             TextAttributeType = TextAttributeTypeEnum.Paragraph;
-            Margins = new Margins();
+            Margins = new Margins(0,0,0,0);
+            IsCopiedToFollowingRun = false;
+        }
+
+        /// <summary>
+        /// If true this attribute requires that its TextRun be contained in a InlineUIContainer, a RichTextBox, and a FlowDocument.
+        /// </summary>
+        public bool RequiresRichTextContainer
+        {
+            get { return Margins.Left != 0 || Margins.Right != 0 || Margins.Top != 0 || Margins.Bottom != 0; } 
         }
 
         public Margins Margins { get; set; }

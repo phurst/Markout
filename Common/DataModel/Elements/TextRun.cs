@@ -11,8 +11,7 @@ namespace Markout.Common.DataModel.Elements {
 
         private List<BaseTextAttribute> _attributes = new List<BaseTextAttribute>();
 
-        public IEnumerable<BaseTextAttribute> Attributes
-        {
+        public IEnumerable<BaseTextAttribute> Attributes {
             get { return _attributes.AsEnumerable(); }
             set { _attributes = value.ToList(); }
         }
@@ -24,7 +23,6 @@ namespace Markout.Common.DataModel.Elements {
         /// </summary>
         /// <param name="other"></param>
         public void GetAttributesFrom(TextRun other) {
-            // other.Attributes.ToList().ForEach(GetAttribute);
             GetAttributesFrom(other.Attributes);
         }
 
@@ -33,7 +31,13 @@ namespace Markout.Common.DataModel.Elements {
         /// </summary>
         /// <param name="attributes"></param>
         public void GetAttributesFrom(IEnumerable<BaseTextAttribute> attributes) {
-            attributes.ToList().ForEach(GetAttribute);
+            attributes.ToList().ForEach(GetAttributeFromOtherRun);
+        }
+
+        public void GetAttributeFromOtherRun(BaseTextAttribute attribute) {
+            if (attribute.IsCopiedToFollowingRun) {
+                GetAttribute(attribute);
+            }
         }
 
         /// <summary>

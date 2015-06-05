@@ -49,7 +49,7 @@ namespace Markout.Input.Tags.TagFactories {
                 return new TextAttributeColor { Color = Color.FromArgb(n), };
             }
 
-            throw new ApplicationException(string.Format("ColorTagFactory can't parse a color from string '{0}'", qualifier));
+            return new TextAttribute();
         }
     }
 }

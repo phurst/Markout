@@ -85,11 +85,14 @@ namespace Markout.Output.Inlines {
         private Inline ProcessParagraphTextRun(TextRun textRun) {
             TextAttributeParagraph taa = textRun.Attributes.FirstOrDefault(ta => ta.TextAttributeType == TextAttributeTypeEnum.Paragraph) as TextAttributeParagraph;
             if (taa == null) {
-                throw new ApplicationException("ProcessParagraphTextRun cannot process a runs lacking an Paragraph attribute");
+                throw new ApplicationException("ProcessParagraphTextRun cannot process a run lacking an Paragraph attribute");
             }
-            Run run = new Run(textRun.Text);
-            run.Background = new SolidColorBrush(Colors.Yellow);
-            return run;
+            Span span = new Span();
+            if (!taa.RequiresRichTextContainer) {
+                span.Inlines.Add(new LineBreak());
+            }
+            span.Inlines.Add(new Run(textRun.Text));
+            return span;
         }
 
         private Inline ProcessAttributes(IEnumerable<BaseTextAttribute> attributes, Inline run) {

@@ -17,12 +17,18 @@
         <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Background="LightGoldenrodYellow">
             <TextBlock.Inlines>
                 <Run>This is a run.</Run>
+                <LineBreak/>
                 <InlineUIContainer>
-                    <RichTextBox Width="150" BorderThickness="0" Background="Transparent">
+                    <RichTextBox Margin="0" Padding="0"  BorderThickness="0" Background="Transparent"
+                                 IsDocumentEnabled="True"
+                                 >
                         <FlowDocument LineHeight="3">
-                            <Paragraph >
+                            <Paragraph>
                                 <Run>Paragraph 1</Run>
                             </Paragraph>
+                            <BlockUIContainer>
+                                <Button x:Name="SayHelloButton" HorizontalAlignment="Left" Command="{Binding SayHelloCommand}">Click Me</Button>
+                            </BlockUIContainer>
                             <Paragraph Padding="0" Margin="30,0" TextAlignment="Left" >
                                 <Run>Paragraph 2</Run>
                                 <LineBreak/>
@@ -34,6 +40,7 @@
                         </FlowDocument>
                     </RichTextBox>
                 </InlineUIContainer>
+                <LineBreak/>
                 <Run>This is another run.</Run>
                 <!--<InlineUIContainer>
                     <ListView Width="200" Height="150">
