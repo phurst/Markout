@@ -54,7 +54,7 @@
   <ItemGroup>
     <Compile Include="BasicTests\TagTests.cs" />
     <Compile Include="MacroDefinitionParser\MacroDefinitionParserTests.cs" />
-    <Compile Include="MarkoutParser\ExternalMarkoutParserTests.cs" />
+    <Compile Include="MarkoutParser\ExternalTagsMarkoutParserTests.cs" />
     <Compile Include="MarkoutParser\AnchorMarkoutParserTests.cs" />
     <Compile Include="MarkoutParser\MarkoutParserMacroTests.cs" />
     <Compile Include="TagParser\ExternalTagParserTests.cs" />

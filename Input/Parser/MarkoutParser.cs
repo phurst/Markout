@@ -8,6 +8,7 @@ using Markout.Common.DataModel.Elements;
 using Markout.Common.DataModel.Enumerations;
 using Markout.Input.Interfaces;
 using Markout.Input.Tags;
+// ReSharper disable All
 
 namespace Markout.Input.Parser {
     
@@ -152,9 +153,13 @@ namespace Markout.Input.Parser {
 
         private string ResolveExternalTag(TextAttributeExternal textAttributeExternal) {
             string rv = string.Empty;
-            IExternalTagResolver resolver;
-            if (ExternalTagResolvers != null && ExternalTagResolvers.TryGetValue(textAttributeExternal.Name, out resolver)) {
-                rv = resolver.Resolve(textAttributeExternal);
+            try {
+                IExternalTagResolver resolver;
+                if(ExternalTagResolvers != null && ExternalTagResolvers.TryGetValue(textAttributeExternal.Name, out resolver)) {
+                    rv = resolver.Resolve(textAttributeExternal);
+                }
+            } catch(Exception ex) {
+                rv = string.Format("An exception was thrown in an external tag resolver: {0}", ex.Message);
             }
             return rv;
         }

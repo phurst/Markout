@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Markout.Input.Tests.MarkoutParser {
 
     [TestClass]
-    public class ExternalMarkoutParserTests {
+    public class ExternalTagsMarkoutParserTests {
 
         private class TestTagResolver : IExternalTagResolver {
             public string Resolve(TextAttributeExternal textAttributeExternal) {
@@ -107,7 +107,7 @@ namespace Markout.Input.Tests.MarkoutParser {
             Assert.AreEqual("SomeText1", textRuns[1].Text);
             Assert.AreEqual(1, textRuns[1].Attributes.Count());
             Assert.AreEqual(TextAttributeTypeEnum.Bold, textRuns[1].Attributes.First().TextAttributeType);
-            Assert.IsTrue(textRuns[1].Attributes.Select(a => a.TextAttributeType).Contains(TextAttributeTypeEnum.Bold));
+            Assert.IsTrue(textRuns[1].Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Bold));
         }
 
         [TestMethod]
@@ -126,12 +126,36 @@ namespace Markout.Input.Tests.MarkoutParser {
 
             Assert.AreEqual("SomeText", textRuns[1].Text);
             Assert.AreEqual(1, textRuns[1].Attributes.Count());
-            Assert.IsTrue(textRuns[1].Attributes.Select(a => a.TextAttributeType).Contains(TextAttributeTypeEnum.Bold));
+            Assert.IsTrue(textRuns[1].Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Bold));
 
             Assert.AreEqual("1", textRuns[2].Text);
             Assert.AreEqual(2, textRuns[2].Attributes.Count());
-            Assert.IsTrue(textRuns[2].Attributes.Select(a => a.TextAttributeType).Contains(TextAttributeTypeEnum.Bold));
-            Assert.IsTrue(textRuns[2].Attributes.Select(a => a.TextAttributeType).Contains(TextAttributeTypeEnum.Italic));
+            Assert.IsTrue(textRuns[2].Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Bold));
+            Assert.IsTrue(textRuns[2].Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Italic));
+        }
+
+        [TestMethod]
+        public void MarkoutParserExternalTrailingAttributeAndInvalidExternalTag() {
+            string input = "0{b}{x:InsertTextHere}{x:NotATagName:foo}{i}1";
+            Parser.MarkoutParser markdownParser = new Parser.MarkoutParser();
+            markdownParser.ExternalTagResolvers = new Dictionary<string, IExternalTagResolver> {
+                { "InsertTextHere", new TestTagResolver() }
+            };
+            List<TextRun> textRuns = markdownParser.Parse(input).ToList();
+            textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
+            Assert.AreEqual(3, textRuns.Count);
+
+            Assert.AreEqual("0", textRuns[0].Text);
+            Assert.AreEqual(0, textRuns[0].Attributes.Count());
+
+            Assert.AreEqual("SomeText", textRuns[1].Text);
+            Assert.AreEqual(1, textRuns[1].Attributes.Count());
+            Assert.IsTrue(textRuns[1].Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Bold));
+
+            Assert.AreEqual("1", textRuns[2].Text);
+            Assert.AreEqual(2, textRuns[2].Attributes.Count());
+            Assert.IsTrue(textRuns[2].Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Bold));
+            Assert.IsTrue(textRuns[2].Attributes.Any(a => a.TextAttributeType == TextAttributeTypeEnum.Italic));
         }
     }
 }
