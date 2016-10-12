@@ -44,7 +44,7 @@ Macros are  supplied as a dictionary to the MarkoutParser, which expands them in
 
 I also supply a `MacroDefinitionParser` that can read macro definitions from a file or string.
 
-# Support for "External" Tags (added in release 1.1)
+# Support for "External" Tags (added in release 1.3)
 
 An "external" tag is one that is resolved to text by code you provide to the parser.
 
