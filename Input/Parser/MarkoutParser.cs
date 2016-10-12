@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Markout.Common.DataModel.Attribute;
 using Markout.Common.DataModel.Elements;
 using Markout.Common.DataModel.Enumerations;
+using Markout.Input.Interfaces;
 using Markout.Input.Tags;
+// ReSharper disable All
 
 namespace Markout.Input.Parser {
     
@@ -16,6 +18,12 @@ namespace Markout.Input.Parser {
         /// Optional macros to be located and then expanded in the text.
         /// </summary>
         public Dictionary<string, string> Macros { get; set; }
+        public Dictionary<string, IExternalTagResolver> ExternalTagResolvers { get; set; }
+
+        public IEnumerable<TextRun> Parse(string text) {
+            text = ParseExternalTags(text);
+            return ParseMarkout(text);
+        }
 
         /// <summary>
         /// Find the tags in the text and then extract the intervening TextRuns complet with
@@ -23,7 +31,7 @@ namespace Markout.Input.Parser {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public IEnumerable<TextRun> Parse(string text) {
+        private IEnumerable<TextRun> ParseMarkout(string text) {
             List<TextRun> textRuns = new List<TextRun>();
 
             if (Macros != null && Macros.Any()) {
@@ -72,6 +80,34 @@ namespace Markout.Input.Parser {
         }
 
         /// <summary>
+        /// Find and substitutr any external tags in the text.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private string ParseExternalTags(string text) {
+            StringBuilder rv = new StringBuilder();
+            Tag prevTag = new Tag { TextAttributeType = TextAttributeTypeEnum.None, };
+            TagParser tagParser = new TagParser();
+            Queue<Tag> tags = new Queue<Tag>(tagParser.ParseExternalTags(text));
+            while(tags.Any() && prevTag != null) {
+                Tag tag = tags.Dequeue();
+                TextAttributeExternal textAttributeExternal = tag.Attribute as TextAttributeExternal;
+                if(textAttributeExternal != null) {
+                    string externalValue = ResolveExternalTag(textAttributeExternal);
+                    if(!string.IsNullOrEmpty(externalValue)) {
+                        rv.Append(text.Substring(prevTag.TrailIndex, tag.StartIndex - prevTag.TrailIndex));
+                        rv.Append(externalValue);
+                    }
+                }
+                prevTag = tag;
+            }
+            if(prevTag.TrailIndex < text.Length) {
+                rv.Append(text.Substring(prevTag.TrailIndex, text.Length - prevTag.TrailIndex));
+            }
+            return rv.ToString();
+        }
+
+        /// <summary>
         /// <para>
         /// A closed run is something like an anchor that is delimited by two tags of the same TextAttributeType, e.g., 
         /// "{a:...}some content{a}". 
@@ -113,6 +149,19 @@ namespace Markout.Input.Parser {
                 currentRun.Text += text.Substring(prevTag.TrailIndex);
                 prevTag = null;
             }
+        }
+
+        private string ResolveExternalTag(TextAttributeExternal textAttributeExternal) {
+            string rv = string.Empty;
+            try {
+                IExternalTagResolver resolver;
+                if(ExternalTagResolvers != null && ExternalTagResolvers.TryGetValue(textAttributeExternal.Name, out resolver)) {
+                    rv = resolver.Resolve(textAttributeExternal);
+                }
+            } catch(Exception ex) {
+                rv = string.Format("An exception was thrown in an external tag resolver: {0}", ex.Message);
+            }
+            return rv;
         }
 
         private string StripEscapes(string s) {

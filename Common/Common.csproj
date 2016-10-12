@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="DataModel\Attribute\BaseTextAttribute.cs" />
     <Compile Include="DataModel\Attribute\TextAttribute.cs" />
+    <Compile Include="DataModel\Attribute\TextAttributeExternal.cs" />
     <Compile Include="DataModel\Attribute\TextAttributeAnchor.cs" />
     <Compile Include="DataModel\Attribute\TextAttributeColor.cs" />
     <Compile Include="DataModel\Attribute\TextAttributeFont.cs" />

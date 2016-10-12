@@ -9,6 +9,7 @@
         Italic,
         Underline,
         Zero,
+        External,
     };
 
 }

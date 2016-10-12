@@ -13,7 +13,7 @@ Is a simple text markup language that is designed to meet the following goals:
 
 All Markout tags are of the form `{tag}`. This makes it easy to identify tags in the input text, so the parser can be rather simple. For example the bold tag is: `{b}`. 
 
-Some tags require information in addition to a basic tag name. These are of the form `{tagname:qualifier1:qualifier2:…}`. Fo example the color tag: {color:red}.
+Some tags require information in addition to a basic tag name. These are of the form `{tagname:qualifier1:qualifier2:…}`. For example the color tag: {color:red}.
 
 Repeating a tag turns it off. For example `plain{b}bold{b}plain`. Or: `BLACK{color:red}RED{color}BLACK`.
 
@@ -44,6 +44,28 @@ Macros are  supplied as a dictionary to the MarkoutParser, which expands them in
 
 I also supply a `MacroDefinitionParser` that can read macro definitions from a file or string.
 
+# Support for "External" Tags (added in release 1.1)
+
+An "external" tag is one that is resolved to text by code you provide to the parser.
+
+By using "external" tags you can insert text (such as the current date) that can only be evaluated at display time. 
+Your tag resolver code is responsible for evaluating the string value that will replace the tag in the text.
+
+"External" tags are resolved and substitiuted into the text before any other tags are evaluated.
+
+An "external" tag is identified by `{x:...}` or `{external:...}` and has a Name and an optional Parameter:
+like this: `{x:name}` or `{x:name:parameter}`.
+
+You provide tag resolvers to the parser by populating its `ExternalTagResolvers` dictionary. The dictionary key is the tag name
+and the value is an instance of the `IExternalTagResolver` interface.
+
+Should you misname an external tag or fail to provide a resolver for a tag name, the
+tag is replaced with an empty string. Should your tag resolver code throw an exception, an ugly message
+will be inserted in the text in place of the tag, so you should avoid throwing by
+trapping exceptions (and log the problem via whatevere logging mechanism your program uses).
+
+See the `ExternalTagsMarkoutParserTests` class for examples of "texternal" tags at work.
+
 # Code Structure
 
 The Markout code contains the following main elements:
@@ -59,6 +81,9 @@ For example, the input text `plain{b}{i}bolditalic` would be parsed and output a
 * The second TextRun would have text “bolditalic” and bold an italic attributes.
 
 The TextRun instances emitted by the `MarkoutParser` class are sent to another class to render them into the desired output form. 
+
+If you provide the `MarkoutParser` with external tag resolvers (via the `ExternalTagResolvers` dictionary), they will be called to resolve any
+external tags in your input text, before any other parsing is done.
 
 If you provide a set of macros to the `MarkoutParser` it will locate and expand them in the input text before parsing it.
 
