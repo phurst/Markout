@@ -83,9 +83,12 @@ namespace Markout.Input.Tests.MarkoutParser {
             };
             List<TextRun> textRuns = markdownParser.Parse(input).ToList();
             textRuns.ForEach(tr => Console.WriteLine(tr.ToString()));
-            Assert.AreEqual(1, textRuns.Count);
+            Assert.AreEqual(2, textRuns.Count);
 
-            Assert.AreEqual("0SomeText1", textRuns[0].Text);
+            Assert.AreEqual("0SomeText", textRuns[0].Text);
+            Assert.AreEqual(0, textRuns[0].Attributes.Count());
+
+            Assert.AreEqual("1", textRuns[1].Text);
             Assert.AreEqual(0, textRuns[0].Attributes.Count());
         }
 
@@ -104,10 +107,13 @@ namespace Markout.Input.Tests.MarkoutParser {
             Assert.AreEqual("0", textRuns[0].Text);
             Assert.AreEqual(0, textRuns[0].Attributes.Count());
 
-            Assert.AreEqual("SomeText1", textRuns[1].Text);
+            Assert.AreEqual("SomeText", textRuns[1].Text);
             Assert.AreEqual(1, textRuns[1].Attributes.Count());
             Assert.AreEqual(TextAttributeTypeEnum.Bold, textRuns[1].Attributes.First().TextAttributeType);
-            Assert.IsTrue(textRuns[1].Attributes.Select(a => a.TextAttributeType).Contains(TextAttributeTypeEnum.Bold));
+
+            Assert.AreEqual("1", textRuns[2].Text);
+            Assert.AreEqual(1, textRuns[2].Attributes.Count());
+            Assert.IsTrue(textRuns[2].Attributes.Select(a => a.TextAttributeType).Contains(TextAttributeTypeEnum.Bold));
         }
 
         [TestMethod]
