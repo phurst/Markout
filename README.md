@@ -13,7 +13,7 @@ Is a simple text markup language that is designed to meet the following goals:
 
 All Markout tags are of the form `{tag}`. This makes it easy to identify tags in the input text, so the parser can be rather simple. For example the bold tag is: `{b}`. 
 
-Some tags require information in addition to a basic tag name. These are of the form `{tagname:qualifier1:qualifier2:Ö}`. For example the color tag: {color:red}.
+Some tags require information in addition to a basic tag name. These are of the form `{tagname:qualifier1:qualifier2:‚Ä¶}`. For example the color tag: {color:red}.
 
 Repeating a tag turns it off. For example `plain{b}bold{b}plain`. Or: `BLACK{color:red}RED{color}BLACK`.
 
@@ -64,7 +64,7 @@ tag is replaced with an empty string. Should your tag resolver code throw an exc
 will be inserted in the text in place of the tag, so you should avoid throwing by
 trapping exceptions (and log the problem via whatevere logging mechanism your program uses).
 
-See the `ExternalTagsMarkoutParserTests` class for examples of "texternal" tags at work.
+See the `ExternalTagsMarkoutParserTests` class for examples of "external" tags at work.
 
 # Code Structure
 
@@ -77,8 +77,8 @@ then chops the text up into a set of `TextRun` instances, combining attributes a
 The output of the `MarkoutParser` is a set of `TextRun` instances.
 
 For example, the input text `plain{b}{i}bolditalic` would be parsed and output as two TextRun instances: 
-* The first TextRun would have text ìplainî and no attributes.
-* The second TextRun would have text ìbolditalicî and bold an italic attributes.
+* The first TextRun would have text ‚Äúplain‚Äù and no attributes.
+* The second TextRun would have text ‚Äúbolditalic‚Äù and bold an italic attributes.
 
 The TextRun instances emitted by the `MarkoutParser` class are sent to another class to render them into the desired output form. 
 
